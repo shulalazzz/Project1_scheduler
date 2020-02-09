@@ -32,3 +32,7 @@ while 1:
             elif admin_selection == 2:
                 my_admin.print_all()
 
+            elif admin_selection == 4:
+                break
+
+
