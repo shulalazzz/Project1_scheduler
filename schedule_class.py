@@ -52,14 +52,14 @@ class slot:
 
     def fill_slot(self):
         beginning = int(3 * self.start_hour + self.start_minute / 20)
-        end = int(3 * self.end_hour + 1 + self.end_minute / 20)
+        end = int(3 * self.end_hour + self.end_minute / 20)
         for i in range(beginning, end):
             self.time_slot[i] = 1
 
-    def print_slot(self):
+        def print_slot(self):
         for i in range(len(self.time_slot)):
             if self.time_slot[i] == 1:
-                print(self.time_slot[i])
+                print(i)
 
     def print_time(self):
         print("Beginning time: ", self.start_hour, ":", self.start_minute)
