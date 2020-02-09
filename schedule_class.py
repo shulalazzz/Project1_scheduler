@@ -56,7 +56,7 @@ class slot:
         for i in range(beginning, end):
             self.time_slot[i] = 1
 
-        def print_slot(self):
+    def print_slot(self):
         for i in range(len(self.time_slot)):
             if self.time_slot[i] == 1:
                 print(i)
