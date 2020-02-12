@@ -1,7 +1,10 @@
 class admin_mode:
-    def __init__(self, creator_name):
-        self.creator_name = creator_name
+    def __init__(self):
         self.__events_list = []
+        self.creator_name = ""
+
+    def set_name(self, creator_name):
+        self.creator_name = creator_name
 
     def add_event(self, single_event):
         self.__events_list.append(single_event)
@@ -62,5 +65,30 @@ class slot:
                 print(i)
 
     def print_time(self):
-        print("Beginning time: ", self.start_hour, ":", self.start_minute)
-        print("End time: ", self.end_hour, ":", self.end_minute)
+        if self.start_minute == 0:
+            print("Beginning time: {}:00".format(self.start_hour))
+        else:
+            print("Beginning time: {}:{}".format(
+                self.start_hour, self.start_minute))
+        if self.end_minute == 0:
+            print("End time: {}:00".format(self.end_hour))
+        else:
+            print("End time: {}:{}".format(self.end_hour, self.end_minute))
+
+
+class availability:
+    def __init__(self):
+        self.users_list = []
+
+    def add_user(self, the_user):
+        self.users_list.append(the_user)
+
+
+class user:
+    def __init__(self, name, start_hour, start_minute, end_hour, end_minute):
+        self.name = name
+        self.start_hour = start_hour
+        self.start_minute = start_minute
+        self.end_hour = end_hour
+        self.end_minute = end_minute
+        self.time_slot = [0] * 72

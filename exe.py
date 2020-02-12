@@ -1,6 +1,6 @@
 import schedule_class
 import re
-
+my_admin = schedule_class.admin_mode()
 while 1:
     print("1.Admin mode\n2.Adding availability mode\n3.Quit")
     try:
@@ -9,10 +9,11 @@ while 1:
         print("Not a number.")
         continue
     if menu_selection == 1:
-        creator_name = input("Please enter your name:")
-        my_admin = schedule_class.admin_mode(creator_name)
+        if my_admin.creator_name == "":
+            creator_name = input("Please enter your name:")
+
         while 1:
-            print("1.Add events\n2.View your events\n3.Check availabe attendees\n4.Quit")
+            print("1.Add events\n2.View your events\n3.Check available attendees\n4.Quit")
             try:
                 admin_selection = int(input())
             except ValueError:
@@ -42,6 +43,8 @@ while 1:
                 my_admin.add_event(current_event)
             elif admin_selection == 2:
                 my_admin.print_all()
+            elif admin_selection == 3:
+                event_time_slot.print_slot()
 
             elif admin_selection == 4:
                 break
