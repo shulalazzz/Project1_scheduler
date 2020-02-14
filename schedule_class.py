@@ -62,5 +62,42 @@ class slot:
                 print(i)
 
     def print_time(self):
-        print("Beginning time: ", self.start_hour, ":", self.start_minute)
-        print("End time: ", self.end_hour, ":", self.end_minute)
+            if self.start_minute == 0:
+                print("Beginning time: {}:00".format(self.start_hour))
+            else:
+                print("Beginning time: {}:{}".format(
+                    self.start_hour, self.start_minute))
+            if self.end_minute == 0:
+                print("End time: {}:00".format(self.end_hour))
+            else:
+                print("End time: {}:{}".format(self.end_hour, self.end_minute))
+
+    class availability_mode:
+        def __init__(self, event_name, ):
+            self.users_list = []
+            self.__view_list = []
+            self.event_name=event_name
+
+        def add_user(self, the_user):
+            self.users_list.append(the_user)
+
+
+
+        def view_all_event(self):
+            for i in range(len(self.__view_list)):
+                self.__view_list[i].print_all()
+
+
+
+    class user:
+        def __init__(self, name, start_hour, start_minute, end_hour, end_minute):
+            self.name = name
+            self.start_hour = start_hour
+            self.start_minute = start_minute
+            self.end_hour = end_hour
+            self.end_minute = end_minute
+            self.time_slot = [0] * 72
+
+
+
+
