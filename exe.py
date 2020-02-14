@@ -3,63 +3,27 @@ import re
 my_admin = schedule_class.admin_mode()
 while 1:
     print("1.Admin mode\n2.Adding availability mode\n3.Quit")
-    menu_selection = int(input())
+    try:
+        menu_selection = int(input("Enter a number:"))
+    except ValueError:
+        print("Not a number.")
+        continue
     if menu_selection == 1:
         if my_admin.creator_name == "":
             creator_name = input("Please enter your name:")
 
         while 1:
-
             print("1.Add events\n2.View your events\n3.Check available attendees\n4.Quit")
             try:
                 admin_selection = int(input())
             except ValueError:
                 print("Not a number.")
                 continue
-
             if admin_selection == 1:
                 event_name = input("Please enter the event name:")
                 event_year = int(input("Please enter the year:"))
-                while 1:
-                    event_month = int(input("Please enter the month:"))
-                    if event_month < 1 or event_month > 12:
-                        print("Enter a valid month!")
-                    elif event_month >= 1 or event_month <= 12:
-                        break
-                while 1:
-                    event_day = int(input("Please enter the day:"))
-                    if event_year % 4 == 0 and event_year % 100 != 0:
-                        if event_month == 1 or event_month == 3 or event_month == 5 or event_month == 7 or event_month == 8 or event_month == 10 or event_month == 12:
-                            if event_day < 1 or event_day > 31:
-                                print("Enter a valid day!")
-                            elif event_day >= 1 or event_day <= 31:
-                                break
-                        elif event_month == 4 or event_month == 6 or event_month == 9 or event_month == 11:
-                            if event_day < 1 or event_day > 30:
-                                print("Enter a valid day!")
-                            elif event_day >= 1 or event_day <= 30:
-                                break
-                        elif event_month == 2:
-                            if event_day < 1 or event_day > 29:
-                                print("Enter a valid day!")
-                            elif event_day >= 1 or event_day <= 29:
-                                break
-                    else:
-                        if event_month == 1 or event_month == 3 or event_month == 5 or event_month == 7 or event_month == 8 or event_month == 10 or event_month == 12:
-                            if event_day < 1 or event_day > 31:
-                                print("Enter a valid day!")
-                            elif event_day >= 1 or event_day <= 31:
-                                break
-                        elif event_month == 4 or event_month == 6 or event_month == 9 or event_month == 11:
-                            if event_day < 1 or event_day > 30:
-                                print("Enter a valid day!")
-                            elif event_day >= 1 or event_day <= 30:
-                                break
-                        elif event_month == 2:
-                            if event_day < 1 or event_day > 28:
-                                print("Enter a valid day!")
-                            elif event_day >= 1 or event_day <= 28:
-                                break
+                event_month = int(input("Please enter the month:"))
+                event_day = int(input("Please enter the day:"))
                 time_string = input(
                     "Please enter the beginning time(eg:10.30):")
                 temp = re.findall(r'\d+', time_string)
@@ -81,3 +45,7 @@ while 1:
                 my_admin.print_all()
             elif admin_selection == 3:
                 event_time_slot.print_slot()
+                event_time_slot.convert_time()
+
+            elif admin_selection == 4:
+                break

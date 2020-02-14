@@ -64,6 +64,22 @@ class slot:
             if self.time_slot[i] == 1:
                 print(i)
 
+    def convert_time(self):
+        for i in range(len(self.time_slot)):
+            if self.time_slot[i] == 1:
+                current_time = i * 20
+                current_hour = int(current_time/60)
+                current_minute = current_time % 60
+                if current_minute == 0:
+                    print("{}:00-{}:{}".format(current_hour,
+                                               current_hour, current_minute + 20))
+                elif current_minute == 40:
+                    print("{}:{}-{}:00".format(current_hour,
+                                               current_minute, current_hour+1))
+                else:
+                    print("{}:{}-{}:{}".format(current_hour,
+                                               current_minute, current_hour, current_minute + 20))
+
     def print_time(self):
         if self.start_minute == 0:
             print("Beginning time: {}:00".format(self.start_hour))
