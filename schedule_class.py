@@ -61,6 +61,8 @@ class event:
 
     def print_event(self):
         print("Event name: " + self.event_name)
+        add_events = open("event.txt", "a")
+        add_events.write("%s\r\n" % self.event_name)
         self.event_date.print_date()
 
     def print_event_name(self):
@@ -76,6 +78,10 @@ class date:
 
     def print_date(self):
         print(self.month, self.day, self.year)
+        add_events = open("event.txt", "a")
+        add_events.write(str(self.year) + " ")
+        add_events.write(str(self.month) + " ")
+        add_events.write(str(self.day) + " ")
         self.time_slot.print_time()
 
 
@@ -162,15 +168,20 @@ class slot:
                                                      current_minute, current_hour, current_minute + 20))
 
     def print_time(self):
+        add_events = open("event.txt", "a")
         if self.start_minute == 0:
             print("Beginning time: {}:00".format(self.start_hour))
+            add_events.write(str(self.start_hour) + " 00 ")
         else:
             print("Beginning time: {}:{}".format(
                 self.start_hour, self.start_minute))
+            add_events.write(str(self.start_hour) + " " + str(self.start_minutes) + " ")
         if self.end_minute == 0:
             print("End time: {}:00".format(self.end_hour))
+            add_events.write(str(self.end_hour) + " 00 ")
         else:
             print("End time: {}:{}".format(self.end_hour, self.end_minute))
+            add_events.write(str(self.end_hour) + " " + str(self.end_minutes) + " ")
 
     def compare_time_slot(self, start_hour, start_minute, end_hour, end_minute):
         is_occupied = False
