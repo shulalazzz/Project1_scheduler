@@ -1,6 +1,7 @@
-class user:
-    def __init__(self, name):
-        self.name = name
+class user_class:
+    def __init__(self):
+        self.account = ""
+        self.password = ""
         self.admin = admin_mode
         self.attend = attend_mode
 
@@ -17,7 +18,6 @@ class admin_mode:
         self.events_list.append(single_event)
 
     def print_all(self):
-        print("Creator of events:", self.creator_name)
         for i in range(len(self.events_list)):
             self.events_list[i].print_event()
 
@@ -36,6 +36,20 @@ class admin_mode:
             if self.events_list[i].event_name == event_name:
                 return self.events_list[i]
 
+    def info_text(self):
+        all_text = ''
+        for i in range(len(self.events_list)):
+            all_text += self.events_list[i].event_name
+            all_text += '\n'
+            all_text += str(self.events_list[i].event_date.month)
+            all_text += ' '
+            all_text += str(self.events_list[i].event_date.day)
+            all_text += ' '
+            all_text += str(self.events_list[i].event_date.year)
+            all_text += '(mm\dd\yyyy)\n'
+
+        return all_text
+
 
 class event:
     def __init__(self, event_name, event_date):
@@ -46,7 +60,7 @@ class event:
         self.event_name = name
 
     def print_event(self):
-        print(self.event_name)
+        print("Event name: " + self.event_name)
         self.event_date.print_date()
 
     def print_event_name(self):
