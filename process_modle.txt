@@ -15,10 +15,9 @@ Design
 	user can create event within legal time(ex. Dec.25 won't be a available), the event will be added to view mode
  --view mode
 	user can see all the event created by other users and can select event they want to attend
-reference
-Use python/Pyqt5 for coding and QT designer for UI 
 
 Code
+Use python/Pyqt5 for coding and QT designer for UI 
 	Main window -- admin mode, view mode, and signup, and two input box for account number and password
 	View window -- events window(selectable), selected window
 	admin Widow -- a calendar, time selector and input box for event name information box for event that user created
