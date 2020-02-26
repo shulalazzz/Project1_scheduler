@@ -228,6 +228,12 @@ class slot:
             self.check_event_attend = True
             print("Add success")
 
+    def pure_attend_slot(self, start_hour, start_minute, end_hour, end_minute, account):
+        beginning = int(3 * start_hour + start_minute / 20)
+        end = int(3 * end_hour + end_minute / 20)
+        for i in range(beginning, end):
+            self.attend_slot[i].append(account)
+
     def convert_time_24(self):
         for i in range(len(self.time_slot)):
             if self.time_slot[i] == 1:

@@ -125,7 +125,6 @@ class signup_window(QDialog):
                         self.send_account()
                         self.send_password()
 
-
 class login_window(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -254,9 +253,6 @@ class login_window(QMainWindow):
     def get_password(self, connect):
         self.login.lineEdit_password.setText(connect)
 
-    # def get_admin_mode(self, connect):
-    #     self.user.admin = connect
-
     def check_account(self):
         read_in_file = open("account.txt", "r")
 
@@ -347,7 +343,6 @@ class admin_window(QMainWindow):
     admin_signal = pyqtSignal(admin_mode)
 
     def __init__(self, login_account, pass_list):
-        # 从文件中加载UI定义
         super().__init__()
         self.admin = uic.loadUi("admin.ui")
         self.admin.calendarWidget.clicked.connect(self.admin.calendarWidget.showToday)
@@ -446,9 +441,9 @@ class admin_window(QMainWindow):
             return "Can't meet between 0:00 am to 5:00 am"
         if beginning >= 35 and beginning < 38:
             return "Can't meet between 12:00 pm to 1:00 pm"
-        if end > 36 and end < 38:
+        if end > 36 and end <= 38:
             return "Can't meet between 12:00 pm to 1:00 pm"
-        if beginning < 35 and end > 38:
+        if beginning <= 35 and end >= 38:
             return "Can't meet between 12:00 pm to 1:00 pm"
         if end <= beginning:
             return "End time can't earlier than beginning time"
@@ -461,6 +456,7 @@ class admin_window(QMainWindow):
         end_hour = self.admin.timeEdit_end.time().hour()
         end_min = self.admin.timeEdit_end.time().minute()
         timeslot_ = slot(start_hour, start_min, end_hour, end_min)
+        timeslot_.pure_attend_slot(start_hour, start_min, end_hour, end_min, self.search_account)
         temp_date = self.admin.calendarWidget.selectedDate()
         date_string = str(temp_date.toPyDate())
         temp = re.findall(r'\d+', date_string)
@@ -516,7 +512,6 @@ class admin_window(QMainWindow):
                             self.total_user_list.append(user_temp)
                             self.write_event_file()
                             self.admin.textBrowser.append(self.admin_mode.info_text_24())
-                            # self.send_admin_mode()
                     else:
                         event_name_exit = False
                         for i in range(len(self.total_user_list[self.total_user_list_index].admin.events_list)):
@@ -549,15 +544,10 @@ class admin_window(QMainWindow):
                                 end_hour_temp = self.admin_mode.events_list[0].event_date.time_slot.end_hour
                                 end_min_temp = self.admin_mode.events_list[0].event_date.time_slot.end_minute
 
-                                # self.total_user_list[self.total_user_list_index].admin.events_list.append(event_obj)
-                                # self.write_event_file()
-                                # self.admin.textBrowser.append(self.admin_mode.info_text_24())
-
                                 if self.total_user_list[self.total_user_list_index].admin.checkevent_date(year_temp, month_temp, day_temp, start_hour_temp, start_min_temp, end_hour_temp, end_min_temp):
                                     self.total_user_list[self.total_user_list_index].admin.events_list.append(event_obj)
                                     self.write_event_file()
                                     self.admin.textBrowser.append(self.admin_mode.info_text_24())
-                                    # self.send_admin_mode()
                                 else:
                                     QMessageBox.about(self.admin, "Message", "Time slot occupied!")
                         else:
@@ -567,19 +557,9 @@ class admin_window(QMainWindow):
         else:
             QMessageBox.about(self.admin, "Message", is_valid)
 
-    # def send_admin_mode(self):
-    #     print("send admin")
-    #     send_mode = self.admin_mode
-    #     self.admin_signal.emit(send_mode)
-
-    def write_username(self):
-        add_username = open("event.txt", 'a')
-        add_username.write(str(self.search_account) + '\n')
-
 
 class view_mode(QMainWindow):
     def __init__(self, login_account, pass_list):
-        # 从文件中加载UI定义
         super().__init__()
         self.view = uic.loadUi("view2.ui")
         self.total_user_view_list = pass_list
@@ -709,8 +689,7 @@ class view_mode(QMainWindow):
                                 view_event_creator = self.total_user_view_list[j].account
 
                                 if view_event_creator == self.search_account:
-                                    QMessageBox.about(self.view, "Error",
-                                                      "Can't attend " + view_event_name + " which is created by you.")
+                                    QMessageBox.about(self.view, "Error", "Can't attend " + view_event_name + " which is created by you.")
                                     exit_attend = True
                                     break
                                 else:
@@ -718,20 +697,67 @@ class view_mode(QMainWindow):
                                     start_min_temp = self.view_event_list[i].event_date.time_slot.start_minute
                                     end_hour_temp = self.view_event_list[i].event_date.time_slot.end_hour
                                     end_min_temp = self.view_event_list[i].event_date.time_slot.end_minute
+                                    year_temp = self.view_event_list[i].event_date.year
+                                    month_temp = self.view_event_list[i].event_date.month
+                                    day_temp = self.view_event_list[i].event_date.day
+                                    attend_time_conflict = False
+                                    search_account_index = -1
 
-                                    self.total_user_view_list[j].admin.events_list[
-                                        k].event_date.time_slot.fill_attend_slot(start_hour_temp, start_min_temp, end_hour_temp, end_min_temp, self.search_account)
+                                    for a in range(len(self.total_user_view_list)):
+                                        if self.total_user_view_list[a].account == self.search_account:
+                                            search_account_index = a
 
-                                    if not self.total_user_view_list[j].admin.events_list[
-                                        k].event_date.time_slot.check_event_attend:
-                                        QMessageBox.about(self.view, "Error", "Your chosen participation time is not in the event time")
-                                        exit_attend = True
-                                        break
+                                    if search_account_index == -1:
+                                        self.total_user_view_list[j].admin.events_list[k].event_date.time_slot.fill_attend_slot(start_hour_temp, start_min_temp, end_hour_temp, end_min_temp, self.search_account)
+
+                                        if not self.total_user_view_list[j].admin.events_list[k].event_date.time_slot.check_event_attend:
+                                            QMessageBox.about(self.view, "Error", "Your chosen participation time is not in the event time")
+                                            exit_attend = True
+                                            break
+                                        else:
+                                            QMessageBox.about(self.view, "Message", "Successfully attend " + view_event_name + ".")
+                                            exit_attend = True
+                                            break
                                     else:
-                                        QMessageBox.about(self.view, "Message", "Successfully attend " + view_event_name + ".")
-                                        exit_attend = True
-                                        break
+                                        if len(self.total_user_view_list[search_account_index].admin.events_list) == 0:
+                                            self.total_user_view_list[j].admin.events_list[k].event_date.time_slot.fill_attend_slot(start_hour_temp, start_min_temp, end_hour_temp, end_min_temp, self.search_account)
 
+                                            if not self.total_user_view_list[j].admin.events_list[k].event_date.time_slot.check_event_attend:
+                                                QMessageBox.about(self.view, "Error", "Your chosen participation time is not in the event time")
+                                                exit_attend = True
+                                                break
+                                            else:
+                                                QMessageBox.about(self.view, "Message", "Successfully attend " + view_event_name + ".")
+                                                exit_attend = True
+                                                break
+                                        else:
+                                            for b in range(len(self.total_user_view_list[search_account_index].admin.events_list)):
+                                                if self.total_user_view_list[search_account_index].admin.events_list[b].event_date.year == year_temp and self.total_user_view_list[search_account_index].admin.events_list[b].event_date.month == month_temp and self.total_user_view_list[search_account_index].admin.events_list[b].event_date.day == day_temp:
+                                                    print("Start time: " + str(start_hour_temp) + ":" + str(start_min_temp))
+
+                                                    beginning = int(3 * start_hour_temp + start_min_temp / 20)
+                                                    end = int(3 * end_hour_temp + end_min_temp / 20)
+
+
+                                                    for c in range(beginning, end):
+                                                        if self.total_user_view_list[search_account_index].admin.events_list[b].event_date.time_slot.time_slot[c] == 1:
+                                                            QMessageBox.about(self.view, "Error", "You have created an event in this time. Please try another time.")
+                                                            attend_time_conflict = True
+                                                            break
+                                                    
+                                                    if not attend_time_conflict:
+                                                        self.total_user_view_list[j].admin.events_list[k].event_date.time_slot.fill_attend_slot(start_hour_temp, start_min_temp, end_hour_temp, end_min_temp, self.search_account)
+
+                                                        if not self.total_user_view_list[j].admin.events_list[k].event_date.time_slot.check_event_attend:
+                                                            QMessageBox.about(self.view, "Error", "Your chosen participation time is not in the event time")
+                                                            exit_attend = True
+                                                            break
+                                                        else:
+                                                            QMessageBox.about(self.view, "Message", "Successfully attend " + view_event_name + ".")
+                                                            exit_attend = True
+                                                            break
+                                                        
+                                        
                         if exit_attend:
                             break
 
@@ -749,11 +775,9 @@ class view_mode(QMainWindow):
                             str(self.total_user_view_list[i].admin.events_list[j].event_date.year) + " " + str(
                                 self.total_user_view_list[i].admin.events_list[j].event_date.month) + " " + str(
                                 self.total_user_view_list[i].admin.events_list[j].event_date.day) + " ")
-                        write_file.write(str(self.total_user_view_list[i].admin.events_list[
-                                                 j].event_date.time_slot.start_hour) + " " + str(
+                        write_file.write(str(self.total_user_view_list[i].admin.events_list[j].event_date.time_slot.start_hour) + " " + str(
                             self.total_user_view_list[i].admin.events_list[j].event_date.time_slot.start_minute) + " ")
-                        write_file.write(str(self.total_user_view_list[i].admin.events_list[
-                                                 j].event_date.time_slot.end_hour) + " " + str(
+                        write_file.write(str(self.total_user_view_list[i].admin.events_list[j].event_date.time_slot.end_hour) + " " + str(
                             self.total_user_view_list[i].admin.events_list[j].event_date.time_slot.end_minute) + " ")
 
                     write_file.write("AdminEnd View ")
@@ -761,14 +785,11 @@ class view_mode(QMainWindow):
                     for j in range(len(self.total_user_view_list[i].admin.events_list)):
                         for m in range(len(
                                 self.total_user_view_list[i].admin.events_list[j].event_date.time_slot.attend_slot)):
-                            if len(self.total_user_view_list[i].admin.events_list[j].event_date.time_slot.attend_slot[
-                                       m]) > 0:
+                            if len(self.total_user_view_list[i].admin.events_list[j].event_date.time_slot.attend_slot[m]) > 0:
                                 write_file.write(str(j) + " ")
-                                for n in range(len(self.total_user_view_list[i].admin.events_list[
-                                                       j].event_date.time_slot.attend_slot[m])):
+                                for n in range(len(self.total_user_view_list[i].admin.events_list[j].event_date.time_slot.attend_slot[m])):
                                     write_file.write(str(m) + " " + str(n) + " " +
-                                                     self.total_user_view_list[i].admin.events_list[
-                                                         j].event_date.time_slot.attend_slot[m][n] + " ")
+                                                     self.total_user_view_list[i].admin.events_list[j].event_date.time_slot.attend_slot[m][n] + " ")
 
                     write_file.write("ViewEnd\n")
                 write_file.close()
