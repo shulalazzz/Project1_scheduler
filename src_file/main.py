@@ -5,7 +5,6 @@ from PyQt5.QtWidgets import QMainWindow, QAction, qApp, QApplication, QMessageBo
 from schedule_class import *
 import re
 
-
 class signup_window(QDialog):
     account_signal = pyqtSignal(str)
     password_signal = pyqtSignal(str)
@@ -550,18 +549,17 @@ class admin_window(QMainWindow):
                                 end_hour_temp = self.admin_mode.events_list[0].event_date.time_slot.end_hour
                                 end_min_temp = self.admin_mode.events_list[0].event_date.time_slot.end_minute
 
-                                self.total_user_list[self.total_user_list_index].admin.events_list.append(event_obj)
-                                self.write_event_file()
-                                self.admin.textBrowser.append(self.admin_mode.info_text_24())
+                                # self.total_user_list[self.total_user_list_index].admin.events_list.append(event_obj)
+                                # self.write_event_file()
+                                # self.admin.textBrowser.append(self.admin_mode.info_text_24())
 
-                                # if self.total_user_list[self.total_user_list_index].admin.checkevent_date(year_temp, month_temp, day_temp, start_hour_temp, start_min_temp, end_hour_temp, end_min_temp):
-                                #     self.total_user_list[self.total_user_list_index].admin.events_list.append(event_obj)
-                                #     self.write_event_file()
-                                #     self.admin.textBrowser.append(self.admin_mode.info_text_24())
-                                #     # self.send_admin_mode()
-                                # else:
-                                #     QMessageBox.about(self.admin, "Message", "Time slot occupied!")
-                                #     pass
+                                if self.total_user_list[self.total_user_list_index].admin.checkevent_date(year_temp, month_temp, day_temp, start_hour_temp, start_min_temp, end_hour_temp, end_min_temp):
+                                    self.total_user_list[self.total_user_list_index].admin.events_list.append(event_obj)
+                                    self.write_event_file()
+                                    self.admin.textBrowser.append(self.admin_mode.info_text_24())
+                                    # self.send_admin_mode()
+                                else:
+                                    QMessageBox.about(self.admin, "Message", "Time slot occupied!")
                         else:
                             QMessageBox.about(self.admin, "Message", "You have created this event.")
                 else:
@@ -625,16 +623,10 @@ class view_mode(QMainWindow):
             else:
                 full_event_name += " " + self.view.listWidget.currentItem().text().split()[i]
 
-        print(self.view.listWidget.currentItem().text().split()[0] + " " +
-              self.view.listWidget.currentItem().text().split()[1] + " " + full_event_name)
-        print(self.view.listWidget.currentItem().text().split()[text_length - 8] + " " +
-              self.view.listWidget.currentItem().text().split()[text_length - 7])
-        print(self.view.listWidget.currentItem().text().split()[text_length - 6] + " " +
-              self.view.listWidget.currentItem().text().split()[text_length - 5] +
-              self.view.listWidget.currentItem().text().split()[text_length - 4] +
-              self.view.listWidget.currentItem().text().split()[text_length - 3])
-        print(self.view.listWidget.currentItem().text().split()[text_length - 2] + " " +
-              self.view.listWidget.currentItem().text().split()[text_length - 1] + '\n')
+        print(self.view.listWidget.currentItem().text().split()[0] + " " + self.view.listWidget.currentItem().text().split()[1] + " " + full_event_name)
+        print(self.view.listWidget.currentItem().text().split()[text_length - 8] + " " + self.view.listWidget.currentItem().text().split()[text_length - 7])
+        print(self.view.listWidget.currentItem().text().split()[text_length - 6] + " " + self.view.listWidget.currentItem().text().split()[text_length - 5] + self.view.listWidget.currentItem().text().split()[text_length - 4] + self.view.listWidget.currentItem().text().split()[text_length - 3])
+        print(self.view.listWidget.currentItem().text().split()[text_length - 2] + " " + self.view.listWidget.currentItem().text().split()[text_length - 1] + '\n')
 
     def set_all_info(self):
         start_hour = self.view.start_time.time().hour()
@@ -648,26 +640,24 @@ class view_mode(QMainWindow):
         if end <= beginning:
             QMessageBox.about(self.view, "Error", "End time can't earlier than beginning time.")
         else:
-            print("Start time: " + str(start_hour) + ":" + str(start_min) + '\n' + "End time: " + str(
-                end_hour) + ":" + str(end_min) + '\n')
+            print("Start time: " + str(start_hour) + ":" + str(start_min) + '\n' + "End time: " + str(end_hour) + ":" + str(end_min) + '\n')
 
             try:
-                event_name = self.view.listWidget.currentItem().text().split()[2]
+                text_length = len(self.view.listWidget.currentItem().text().split())
+
+                event_name = ""
+                for i in range(2, text_length - 8):
+                    if event_name == "":
+                        event_name = self.view.listWidget.currentItem().text().split()[i]
+                    else:
+                        event_name += " " + self.view.listWidget.currentItem().text().split()[i]
 
                 if len(self.view_event_list) != 0:
                     QMessageBox.about(self.view, "Message", "You have added an event. Please click finish add.")
                 else:
-                    confirm = QMessageBox.question(self.view, 'Message',
-                                                   'Confirm adding this event \n{}'.format(event_name),
-                                                   QMessageBox.Yes | QMessageBox.No)
+                    confirm = QMessageBox.question(self.view, 'Message', 'Confirm adding this event \n{}'.format(event_name), QMessageBox.Yes | QMessageBox.No)
 
                     if confirm == QMessageBox.Yes:
-                        text_length = len(self.view.listWidget.currentItem().text().split())
-                        print("text length: " + str(text_length))
-                        # for i in range(len(self.view.listWidget.currentItem().text())):
-                        #     print(self.view.listWidget.currentItem().test().split()[i])
-                        # pass
-
                         num = re.findall('\w+', self.view.listWidget.currentItem().text().split()[text_length - 7])
                         cur_year = num[0]
                         cur_month = num[1]
@@ -693,18 +683,14 @@ class view_mode(QMainWindow):
                         print("Total length of view_event_list: " + str(len(self.view_event_list)) + '\n')
 
                         self.view.textBrowser.append("Event name:" + event_name)
-                        self.view.textBrowser.append(
-                            "Time slot you participated: " + str(start_hour) + ":" + str(start_min) + "-" + str(
-                                end_hour) + ":" + str(end_min) + '\n')
+                        self.view.textBrowser.append("Time slot you participated: " + str(start_hour) + ":" + str(start_min) + "-" + str(end_hour) + ":" + str(end_min) + '\n')
                     else:
                         QMessageBox.about(self.view, 'Message', 'Canceled')
             except:
-                QMessageBox.information(self.view, "Error",
-                                        "Please click one event which you want to attend, then click the red arrow.")
+                QMessageBox.information(self.view, "Error", "Please click one event which you want to attend, then click the red arrow.")
 
     def view_End(self):
-        reply = QMessageBox.question(self.view, "Message", "You want to attend above event.",
-                                     QMessageBox.Yes | QMessageBox.No)
+        reply = QMessageBox.question(self.view, "Message", "You want to attend above event.", QMessageBox.Yes | QMessageBox.No)
 
         if reply == QMessageBox.Yes:
             if len(self.view_event_list) == 0:
@@ -724,7 +710,7 @@ class view_mode(QMainWindow):
 
                                 if view_event_creator == self.search_account:
                                     QMessageBox.about(self.view, "Error",
-                                                      "Can't attent " + view_event_name + " which is created by you.")
+                                                      "Can't attend " + view_event_name + " which is created by you.")
                                     exit_attend = True
                                     break
                                 else:
@@ -734,27 +720,18 @@ class view_mode(QMainWindow):
                                     end_min_temp = self.view_event_list[i].event_date.time_slot.end_minute
 
                                     self.total_user_view_list[j].admin.events_list[
-                                        k].event_date.time_slot.fill_attend_slot(start_hour_temp, start_min_temp,
-                                                                                 end_hour_temp, end_min_temp,
-                                                                                 self.search_account)
+                                        k].event_date.time_slot.fill_attend_slot(start_hour_temp, start_min_temp, end_hour_temp, end_min_temp, self.search_account)
 
                                     if not self.total_user_view_list[j].admin.events_list[
                                         k].event_date.time_slot.check_event_attend:
-                                        QMessageBox.about(self.view, "Error",
-                                                          "Your chosen participation time is not in the event time")
+                                        QMessageBox.about(self.view, "Error", "Your chosen participation time is not in the event time")
                                         exit_attend = True
                                         break
                                     else:
-                                        QMessageBox.about(self.view, "Message",
-                                                          "Successfully attend " + view_event_name + ".")
+                                        QMessageBox.about(self.view, "Message", "Successfully attend " + view_event_name + ".")
                                         exit_attend = True
                                         break
 
-                                    # print(len(self.total_user_view_list[j].admin.events_list[k].event_date.time_slot.attend_slot))
-                                    # print(len(self.total_user_view_list[j].admin.events_list[k].event_date.time_slot.attend_slot[0]))
-                                    # for m in range(len(self.total_user_view_list[j].admin.events_list[k].event_date.time_slot.attend_slot)):
-                                    #     for n in range(len(self.total_user_view_list[j].admin.events_list[k].event_date.time_slot.attend_slot[m])):
-                                    #         print("m: " + str(m) + " n: " + str(n) + " " + self.total_user_view_list[j].admin.events_list[k].event_date.time_slot.attend_slot[m][n])
                         if exit_attend:
                             break
 
@@ -795,6 +772,7 @@ class view_mode(QMainWindow):
 
                     write_file.write("ViewEnd\n")
                 write_file.close()
+            self.view.textBrowser.clear()
         else:
             QMessageBox.about(self.view, 'Message', 'Canceled')
 

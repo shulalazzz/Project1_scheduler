@@ -1,9 +1,3 @@
-<<<<<<< Updated upstream
-class admin_mode:
-    def __init__(self, creator_name):
-        self.creator_name = creator_name
-        self.__events_list = []
-=======
 class user_class:
     def __init__(self):
         self.account = ""
@@ -22,21 +16,15 @@ class admin_mode:
                                                                               end_minute):
                     return False
         return True
->>>>>>> Stashed changes
 
     def add_event(self, single_event):
-        self.__events_list.append(single_event)
+        self.events_list.append(single_event)
 
     def print_all(self):
-        print("Creator of events:", self.creator_name)
-        for i in range(len(self.__events_list)):
-            self.__events_list[i].print_event()
+        for i in range(len(self.events_list)):
+            self.events_list[i].print_event()
 
     def print_event_name(self):
-<<<<<<< Updated upstream
-        for i in range(len(self.__events_list)):
-            self.__events_list[i].print_event_name()
-=======
         for i in range(len(self.events_list)):
             self.events_list[i].print_event_name()
 
@@ -165,7 +153,6 @@ class admin_mode:
                                                                    current_minute + 20)) + " " + name_string + '\n'
 
         return all_text
->>>>>>> Stashed changes
 
 
 class event:
@@ -173,8 +160,11 @@ class event:
         self.event_name = event_name
         self.event_date = event_date
 
+    def set_event_name(self, name):
+        self.event_name = name
+
     def print_event(self):
-        print(self.event_name)
+        print("Event name: " + self.event_name)
         self.event_date.print_date()
 
     def print_event_name(self):
@@ -238,11 +228,69 @@ class slot:
             self.check_event_attend = True
             print("Add success")
 
+    def convert_time_24(self):
+        for i in range(len(self.time_slot)):
+            if self.time_slot[i] == 1:
+                current_time = i * 20
+                current_hour = int(current_time / 60)
+                current_minute = current_time % 60
+                if current_minute == 0:
+                    print("{}:00-{}:{}".format(current_hour,
+                                               current_hour, current_minute + 20))
+                elif current_minute == 40:
+                    print("{}:{}-{}:00".format(current_hour,
+                                               current_minute, current_hour + 1))
+                else:
+                    print("{}:{}-{}:{}".format(current_hour,
+                                               current_minute, current_hour, current_minute + 20))
+
+    def convert_time_12(self):
+        for i in range(0, 35):
+            if self.time_slot[i] == 1:
+                current_time = i * 20
+                current_hour = int(current_time / 60)
+                current_minute = current_time % 60
+                if current_minute == 0:
+                    print("{}:00 am-{}:{} am".format(current_hour,
+                                                     current_hour, current_minute + 20))
+                elif current_minute == 40:
+                    print("{}:{} am-{}:00 am".format(current_hour,
+                                                     current_minute, current_hour + 1))
+                else:
+                    print("{}:{} am-{}:{} am".format(current_hour,
+                                                     current_minute, current_hour, current_minute + 20))
+        if self.time_slot[35] == 1:
+            print("11:40 am-12:00 pm")
+        for i in range(36, 39):
+            current_time = i * 20
+            current_hour = int(current_time / 60)
+            current_minute = current_time % 60
+            if current_minute == 0:
+                print("{}:00 pm-{}:{} pm".format(current_hour,
+                                                 current_hour, current_minute + 20))
+            elif current_minute == 40:
+                print("{}:{} pm-{}:00 pm".format(current_hour,
+                                                 current_minute, current_hour + 1))
+            else:
+                print("{}:{} pm-{}:{} pm".format(current_hour,
+                                                 current_minute, current_hour, current_minute + 20))
+
+        for i in range(39, 72):
+            if self.time_slot[i] == 1:
+                current_time = i * 20
+                current_hour = int(current_time / 60) - 12
+                current_minute = current_time % 60
+                if current_minute == 0:
+                    print("{}:00 pm-{}:{} pm".format(current_hour,
+                                                     current_hour, current_minute + 20))
+                elif current_minute == 40:
+                    print("{}:{} pm-{}:00 pm".format(current_hour,
+                                                     current_minute, current_hour + 1))
+                else:
+                    print("{}:{} pm-{}:{} pm".format(current_hour,
+                                                     current_minute, current_hour, current_minute + 20))
+
     def print_time(self):
-<<<<<<< Updated upstream
-        print("Beginning time: ", self.start_hour, ":", self.start_minute)
-        print("End time: ", self.end_hour, ":", self.end_minute)
-=======
         if self.start_minute == 0:
             print("Beginning time: {}:00".format(self.start_hour))
         else:
@@ -285,4 +333,3 @@ class slot:
             if self.time_slot[i] == 1:
                 return False
         return True
->>>>>>> Stashed changes
