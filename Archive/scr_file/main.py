@@ -15,7 +15,8 @@ class signup_window(QDialog):
         self.sign = uic.loadUi("sign.ui")
         self.name_arr = []
         self.password_arr = []
-        self.sign.pushButton_create.clicked.connect(lambda: self.check_new_account())
+        self.sign.pushButton_create.clicked.connect(
+            lambda: self.check_new_account())
 
     def send_account(self):
         account = self.sign.lineEdit_account.text()
@@ -49,11 +50,14 @@ class signup_window(QDialog):
 
         if len(self.name_arr) == 0:
             if self.sign.lineEdit_account.text() == "":
-                QMessageBox.information(self, "Error", "User name cannot be empty!")
+                QMessageBox.information(
+                    self, "Error", "User name cannot be empty!")
             elif self.sign.lineEdit_password.text() == "" and self.sign.lineEdit_rePassword.text() == "":
-                QMessageBox.information(self, "Error", "User password cannot be empty!")
+                QMessageBox.information(
+                    self, "Error", "User password cannot be empty!")
             elif self.sign.lineEdit_password.text() != self.sign.lineEdit_rePassword.text():
-                QMessageBox.information(self, "Error", "Two passwords are different! Please check it.")
+                QMessageBox.information(
+                    self, "Error", "Two passwords are different! Please check it.")
             else:
                 get_name_space = False
                 get_password_space = False
@@ -69,33 +73,41 @@ class signup_window(QDialog):
                         break
 
                 if get_name_space:
-                    QMessageBox.information(self, "Error", "User name cannnot have space.")
+                    QMessageBox.information(
+                        self, "Error", "User name cannnot have space.")
                 elif get_password_space:
-                    QMessageBox.information(self, "Error", "Password cannot have space")
+                    QMessageBox.information(
+                        self, "Error", "Password cannot have space")
                 else:
                     add_in_file = open("account.txt", "a")
                     self.name_arr.append(self.sign.lineEdit_account.text())
-                    self.password_arr.append(self.sign.lineEdit_password.text())
+                    self.password_arr.append(
+                        self.sign.lineEdit_password.text())
                     add_in_file.write(
                         self.sign.lineEdit_account.text() + " " + self.sign.lineEdit_password.text() + '\n')
                     add_in_file.close()
-                    QMessageBox.information(self, "Congratulation", "Create account success.", QMessageBox.Ok)
+                    QMessageBox.information(
+                        self, "Congratulation", "Create account success.", QMessageBox.Ok)
                     self.send_account()
                     self.send_password()
         else:
             for i in range(len(self.name_arr)):
                 if self.sign.lineEdit_account.text() == self.name_arr[i]:
-                    QMessageBox.information(self, "Error", "User name has been created. Please try another one.")
+                    QMessageBox.information(
+                        self, "Error", "User name has been created. Please try another one.")
                     name_exit = True
                     break
 
             if not name_exit:
                 if self.sign.lineEdit_account.text() == "":
-                    QMessageBox.information(self, "Error", "User name cannot be empty!")
+                    QMessageBox.information(
+                        self, "Error", "User name cannot be empty!")
                 elif self.sign.lineEdit_password.text() == "" and self.sign.lineEdit_rePassword.text() == "":
-                    QMessageBox.information(self, "Error", "User password cannot be empty!")
+                    QMessageBox.information(
+                        self, "Error", "User password cannot be empty!")
                 elif self.sign.lineEdit_password.text() != self.sign.lineEdit_rePassword.text():
-                    QMessageBox.information(self, "Error", "Two passwords are different! Please check it.")
+                    QMessageBox.information(
+                        self, "Error", "Two passwords are different! Please check it.")
                 else:
                     get_name_space = False
                     get_password_space = False
@@ -111,13 +123,16 @@ class signup_window(QDialog):
                             break
 
                     if get_name_space:
-                        QMessageBox.information(self, "Error", "User name cannnot have space.")
+                        QMessageBox.information(
+                            self, "Error", "User name cannnot have space.")
                     elif get_password_space:
-                        QMessageBox.information(self, "Error", "Password cannot have space")
+                        QMessageBox.information(
+                            self, "Error", "Password cannot have space")
                     else:
                         add_in_file = open("account.txt", "a")
                         self.name_arr.append(self.sign.lineEdit_account.text())
-                        self.password_arr.append(self.sign.lineEdit_password.text())
+                        self.password_arr.append(
+                            self.sign.lineEdit_password.text())
                         add_in_file.write(
                             self.sign.lineEdit_account.text() + " " + self.sign.lineEdit_password.text() + '\n')
                         add_in_file.close()
@@ -294,7 +309,8 @@ class login_window(QMainWindow):
                     break
 
         if not get_account:
-            QMessageBox.information(self, "Error", "No account with this user name!")
+            QMessageBox.information(
+                self, "Error", "No account with this user name!")
 
     def check_account_view(self):
         read_in_file = open("account.txt", "r")
@@ -332,15 +348,18 @@ class login_window(QMainWindow):
                     break
 
         if not get_account:
-            QMessageBox.information(self, "Error", "No account with this user name!")
+            QMessageBox.information(
+                self, "Error", "No account with this user name!")
 
     def open_admin(self):
-        self.admin_win = admin_window(self.login.lineEdit_account.text(), self.total_list)
+        self.admin_win = admin_window(
+            self.login.lineEdit_account.text(), self.total_list)
         self.admin_win.admin.show()
         # self.admin_win.admin_signal.connect(self.get_admin_mode)
 
     def open_view(self):
-        self.view_win = view_mode(self.login.lineEdit_account.text(), self.total_list)
+        self.view_win = view_mode(
+            self.login.lineEdit_account.text(), self.total_list)
         self.view_win.view.show()
 
 
@@ -351,10 +370,12 @@ class admin_window(QMainWindow):
         # 从文件中加载UI定义
         super().__init__()
         self.admin = uic.loadUi("admin.ui")
-        self.admin.calendarWidget.clicked.connect(self.admin.calendarWidget.showToday)
+        self.admin.calendarWidget.clicked.connect(
+            self.admin.calendarWidget.showToday)
         self.admin.button_calendar.clicked.connect(lambda: self.set_all_info())
         self.search_account = login_account
-        self.admin.label_current_user.setText("Current user is: " + login_account)
+        self.admin.label_current_user.setText(
+            "Current user is: " + login_account)
         self.admin.label_current_user.adjustSize()
         self.total_user_list = pass_list
         self.admin_mode = admin_mode()
@@ -402,7 +423,8 @@ class admin_window(QMainWindow):
 
             for j in range(len(self.total_user_list[i].admin.events_list)):
                 write_file.write("EventName ")
-                write_file.write(self.total_user_list[i].admin.events_list[j].event_name + " ")
+                write_file.write(
+                    self.total_user_list[i].admin.events_list[j].event_name + " ")
                 write_file.write("EventEnd ")
                 write_file.write(str(self.total_user_list[i].admin.events_list[j].event_date.year) + " " + str(
                     self.total_user_list[i].admin.events_list[j].event_date.month) + " " + str(
@@ -462,7 +484,8 @@ class admin_window(QMainWindow):
         end_hour = self.admin.timeEdit_end.time().hour()
         end_min = self.admin.timeEdit_end.time().minute()
         timeslot_ = slot(start_hour, start_min, end_hour, end_min)
-        timeslot_.pure_attend_slot(start_hour, start_min, end_hour, end_min, self.search_account)
+        timeslot_.pure_attend_slot(
+            start_hour, start_min, end_hour, end_min, self.search_account)
         temp_date = self.admin.calendarWidget.selectedDate()
         date_string = str(temp_date.toPyDate())
         temp = re.findall(r'\d+', date_string)
@@ -471,7 +494,8 @@ class admin_window(QMainWindow):
         month = _date[1]
         day = _date[2]
 
-        is_valid = self.check_valid_info(year, month, day, start_hour, start_min, end_hour, end_min)
+        is_valid = self.check_valid_info(
+            year, month, day, start_hour, start_min, end_hour, end_min)
 
         if is_valid == "True":
             date_obj = date(year, month, day, timeslot_)
@@ -481,10 +505,12 @@ class admin_window(QMainWindow):
             mode.add_event(event_obj)
 
             if event_name == "":
-                QMessageBox.about(self.admin, "Error", "Event name can't be empty.")
+                QMessageBox.about(self.admin, "Error",
+                                  "Event name can't be empty.")
             else:
                 confirm = QMessageBox.question(self.admin, 'Message',
-                                               'Confirm adding this event \n{}'.format(event_name),
+                                               'Confirm adding this event \n{}'.format(
+                                                   event_name),
                                                QMessageBox.Yes | QMessageBox.No)
                 if confirm == QMessageBox.Yes:
                     self.admin_mode = mode
@@ -517,14 +543,16 @@ class admin_window(QMainWindow):
 
                             self.total_user_list.append(user_temp)
                             self.write_event_file()
-                            self.admin.textBrowser.append(self.admin_mode.info_text_24())
+                            self.admin.textBrowser.append(
+                                self.admin_mode.info_text_24())
                             # self.send_admin_mode()
                     else:
                         event_name_exit = False
                         for i in range(len(self.total_user_list[self.total_user_list_index].admin.events_list)):
-                            print(self.total_user_list[self.total_user_list_index].admin.events_list[i].event_name)
+                            print(
+                                self.total_user_list[self.total_user_list_index].admin.events_list[i].event_name)
                             if event_name == self.total_user_list[self.total_user_list_index].admin.events_list[
-                                i].event_name:
+                                    i].event_name:
                                 self.admin.textBrowser.append("Event existed")
                                 event_name_exit = True
                                 break
@@ -546,8 +574,10 @@ class admin_window(QMainWindow):
                                 year_temp = self.admin_mode.events_list[0].event_date.year
                                 month_temp = self.admin_mode.events_list[0].event_date.month
                                 day_temp = self.admin_mode.events_list[0].event_date.day
-                                start_hour_temp = self.admin_mode.events_list[0].event_date.time_slot.start_hour
-                                start_min_temp = self.admin_mode.events_list[0].event_date.time_slot.start_minute
+                                start_hour_temp = self.admin_mode.events_list[
+                                    0].event_date.time_slot.start_hour
+                                start_min_temp = self.admin_mode.events_list[
+                                    0].event_date.time_slot.start_minute
                                 end_hour_temp = self.admin_mode.events_list[0].event_date.time_slot.end_hour
                                 end_min_temp = self.admin_mode.events_list[0].event_date.time_slot.end_minute
 
@@ -556,14 +586,18 @@ class admin_window(QMainWindow):
                                 # self.admin.textBrowser.append(self.admin_mode.info_text_24())
 
                                 if self.total_user_list[self.total_user_list_index].admin.checkevent_date(year_temp, month_temp, day_temp, start_hour_temp, start_min_temp, end_hour_temp, end_min_temp):
-                                    self.total_user_list[self.total_user_list_index].admin.events_list.append(event_obj)
+                                    self.total_user_list[self.total_user_list_index].admin.events_list.append(
+                                        event_obj)
                                     self.write_event_file()
-                                    self.admin.textBrowser.append(self.admin_mode.info_text_24())
+                                    self.admin.textBrowser.append(
+                                        self.admin_mode.info_text_24())
                                     # self.send_admin_mode()
                                 else:
-                                    QMessageBox.about(self.admin, "Message", "Time slot occupied!")
+                                    QMessageBox.about(
+                                        self.admin, "Message", "Time slot occupied!")
                         else:
-                            QMessageBox.about(self.admin, "Message", "You have created this event.")
+                            QMessageBox.about(
+                                self.admin, "Message", "You have created this event.")
                 else:
                     QMessageBox.about(self.admin, 'Message', 'Canceled')
         else:
@@ -611,7 +645,8 @@ class view_mode(QMainWindow):
                         end_hour) + ":" + str(end_minutes) + '\n' + "Host: " + host + '\n')
                 self.view.verticalLayout.addWidget(self.view.listWidget)
 
-        self.view.listWidget.itemSelectionChanged.connect(self.selectionChanged)
+        self.view.listWidget.itemSelectionChanged.connect(
+            self.selectionChanged)
         self.view.verticalLayout.addWidget(self.view.listWidget)
 
     def selectionChanged(self):
@@ -621,9 +656,11 @@ class view_mode(QMainWindow):
         full_event_name = ""
         for i in range(2, text_length - 8):
             if full_event_name == "":
-                full_event_name = self.view.listWidget.currentItem().text().split()[i]
+                full_event_name = self.view.listWidget.currentItem().text().split()[
+                    i]
             else:
-                full_event_name += " " + self.view.listWidget.currentItem().text().split()[i]
+                full_event_name += " " + \
+                    self.view.listWidget.currentItem().text().split()[i]
 
         print(self.view.listWidget.currentItem().text().split()[0] + " " +
               self.view.listWidget.currentItem().text().split()[1] + " " + full_event_name)
@@ -646,57 +683,75 @@ class view_mode(QMainWindow):
         end = int(3 * end_hour + end_min / 20)
 
         if end <= beginning:
-            QMessageBox.about(self.view, "Error", "End time can't earlier than beginning time.")
+            QMessageBox.about(self.view, "Error",
+                              "End time can't earlier than beginning time.")
         else:
             print("Start time: " + str(start_hour) + ":" + str(start_min) + '\n' + "End time: " + str(
                 end_hour) + ":" + str(end_min) + '\n')
 
             try:
-                text_length = len(self.view.listWidget.currentItem().text().split())
+                text_length = len(
+                    self.view.listWidget.currentItem().text().split())
 
                 event_name = ""
                 for i in range(2, text_length - 8):
                     if event_name == "":
-                        event_name = self.view.listWidget.currentItem().text().split()[i]
+                        event_name = self.view.listWidget.currentItem().text().split()[
+                            i]
                     else:
-                        event_name += " " + self.view.listWidget.currentItem().text().split()[i]
+                        event_name += " " + \
+                            self.view.listWidget.currentItem().text().split()[
+                                i]
 
                 if len(self.view_event_list) != 0:
-                    QMessageBox.about(self.view, "Message", "You have added an event. Please click finish add.")
+                    QMessageBox.about(
+                        self.view, "Message", "You have added an event. Please click finish add.")
                 else:
                     confirm = QMessageBox.question(self.view, 'Message',
-                                                   'Confirm adding this event \n{}'.format(event_name),
+                                                   'Confirm adding this event \n{}'.format(
+                                                       event_name),
                                                    QMessageBox.Yes | QMessageBox.No)
 
                     if confirm == QMessageBox.Yes:
-                        text_length = len(self.view.listWidget.currentItem().text().split())
+                        text_length = len(
+                            self.view.listWidget.currentItem().text().split())
                         print("text length: " + str(text_length))
 
-                        num = re.findall('\w+', self.view.listWidget.currentItem().text().split()[text_length - 7])
+                        num = re.findall(
+                            '\w+', self.view.listWidget.currentItem().text().split()[text_length - 7])
                         cur_year = num[0]
                         cur_month = num[1]
                         cur_day = num[2]
 
-                        num = re.findall('\w+', self.view.listWidget.currentItem().text().split()[text_length - 5])
+                        num = re.findall(
+                            '\w+', self.view.listWidget.currentItem().text().split()[text_length - 5])
                         cur_start_hour = num[0]
                         cur_start_minute = num[1]
 
-                        num = re.findall('\w+', self.view.listWidget.currentItem().text().split()[text_length - 3])
+                        num = re.findall(
+                            '\w+', self.view.listWidget.currentItem().text().split()[text_length - 3])
                         cur_end_hour = num[0]
                         cur_end_minute = num[1]
 
-                        print("Year: " + cur_year + "\nMonth: " + cur_month + "\nDay: " + cur_day)
-                        print("Start time: " + cur_start_hour + ":" + cur_start_minute)
-                        print("End time: " + cur_end_hour + ":" + cur_end_minute + '\n')
+                        print("Year: " + cur_year + "\nMonth: " +
+                              cur_month + "\nDay: " + cur_day)
+                        print("Start time: " + cur_start_hour +
+                              ":" + cur_start_minute)
+                        print("End time: " + cur_end_hour +
+                              ":" + cur_end_minute + '\n')
 
-                        event_time_slot_temp = slot(start_hour, start_min, end_hour, end_min)
-                        event_date_temp = date(int(cur_year), int(cur_month), int(cur_day), event_time_slot_temp)
+                        event_time_slot_temp = slot(
+                            start_hour, start_min, end_hour, end_min)
+                        event_date_temp = date(int(cur_year), int(
+                            cur_month), int(cur_day), event_time_slot_temp)
                         event_temp = event(event_name, event_date_temp)
 
                         self.view_event_list.append(event_temp)
-                        print("Total length of view_event_list: " + str(len(self.view_event_list)) + '\n')
+                        print("Total length of view_event_list: " +
+                              str(len(self.view_event_list)) + '\n')
 
-                        self.view.textBrowser.append("Event name:" + event_name)
+                        self.view.textBrowser.append(
+                            "Event name:" + event_name)
                         self.view.textBrowser.append(
                             "Time slot you participated: " + str(start_hour) + ":" + str(start_min) + "-" + str(
                                 end_hour) + ":" + str(end_min) + '\n')
@@ -712,9 +767,11 @@ class view_mode(QMainWindow):
 
         if reply == QMessageBox.Yes:
             if len(self.view_event_list) == 0:
-                QMessageBox.about(self.view, 'Error', "You don't select any event.")
+                QMessageBox.about(self.view, 'Error',
+                                  "You don't select any event.")
             else:
-                print("Length of view_event_list: " + str(len(self.view_event_list)))
+                print("Length of view_event_list: " +
+                      str(len(self.view_event_list)))
 
                 for i in range(len(self.view_event_list)):
                     view_event_name = self.view_event_list[i].event_name
@@ -727,7 +784,8 @@ class view_mode(QMainWindow):
                                 view_event_creator = self.total_user_view_list[j].account
 
                                 if view_event_creator == self.search_account:
-                                    QMessageBox.about(self.view, "Error", "Can't attend " + view_event_name + " which is created by you.")
+                                    QMessageBox.about(
+                                        self.view, "Error", "Can't attend " + view_event_name + " which is created by you.")
                                     exit_attend = True
                                     break
                                 else:
@@ -736,15 +794,19 @@ class view_mode(QMainWindow):
                                     end_hour_temp = self.view_event_list[i].event_date.time_slot.end_hour
                                     end_min_temp = self.view_event_list[i].event_date.time_slot.end_minute
 
-                                    self.total_user_view_list[j].admin.events_list[k].event_date.time_slot.fill_attend_slot(start_hour_temp, start_min_temp, end_hour_temp, end_min_temp, self.search_account)
+                                    self.total_user_view_list[j].admin.events_list[k].event_date.time_slot.fill_attend_slot(
+                                        start_hour_temp, start_min_temp, end_hour_temp, end_min_temp, self.search_account)
 
                                     if not self.total_user_view_list[j].admin.events_list[k].event_date.time_slot.check_event_attend:
-                                        self.total_user_view_list[j].admin.events_list[k].event_date.time_slot.check_event_attend = False
-                                        QMessageBox.about(self.view, "Error", "Your chosen participation time is not in the event time")
+                                        QMessageBox.about(
+                                            self.view, "Error", "Your chosen participation time is not in the event time")
                                         exit_attend = True
                                         break
                                     else:
-                                        QMessageBox.about(self.view, "Message", "Successfully attend " + view_event_name + ".")
+                                        QMessageBox.about(
+                                            self.view, "Message", "Successfully attend " + view_event_name + ".")
+                                        self.total_user_view_list[j].admin.events_list[
+                                            k].event_date.time_slot.check_event_attend = False
                                         exit_attend = True
                                         break
 
@@ -755,21 +817,23 @@ class view_mode(QMainWindow):
                 write_file = open("event.txt", "w+")
 
                 for i in range(len(self.total_user_view_list)):
-                    write_file.write(self.total_user_view_list[i].account + " Admin ")
+                    write_file.write(
+                        self.total_user_view_list[i].account + " Admin ")
 
                     for j in range(len(self.total_user_view_list[i].admin.events_list)):
                         write_file.write("EventName ")
-                        write_file.write(self.total_user_view_list[i].admin.events_list[j].event_name + " ")
+                        write_file.write(
+                            self.total_user_view_list[i].admin.events_list[j].event_name + " ")
                         write_file.write("EventEnd ")
                         write_file.write(
                             str(self.total_user_view_list[i].admin.events_list[j].event_date.year) + " " + str(
                                 self.total_user_view_list[i].admin.events_list[j].event_date.month) + " " + str(
                                 self.total_user_view_list[i].admin.events_list[j].event_date.day) + " ")
                         write_file.write(str(self.total_user_view_list[i].admin.events_list[
-                                                 j].event_date.time_slot.start_hour) + " " + str(
+                            j].event_date.time_slot.start_hour) + " " + str(
                             self.total_user_view_list[i].admin.events_list[j].event_date.time_slot.start_minute) + " ")
                         write_file.write(str(self.total_user_view_list[i].admin.events_list[
-                                                 j].event_date.time_slot.end_hour) + " " + str(
+                            j].event_date.time_slot.end_hour) + " " + str(
                             self.total_user_view_list[i].admin.events_list[j].event_date.time_slot.end_minute) + " ")
 
                     write_file.write("AdminEnd View ")
@@ -778,10 +842,10 @@ class view_mode(QMainWindow):
                         for m in range(len(
                                 self.total_user_view_list[i].admin.events_list[j].event_date.time_slot.attend_slot)):
                             if len(self.total_user_view_list[i].admin.events_list[j].event_date.time_slot.attend_slot[
-                                       m]) > 0:
+                                    m]) > 0:
                                 write_file.write(str(j) + " ")
                                 for n in range(len(self.total_user_view_list[i].admin.events_list[
-                                                       j].event_date.time_slot.attend_slot[m])):
+                                        j].event_date.time_slot.attend_slot[m])):
                                     write_file.write(str(m) + " " + str(n) + " " +
                                                      self.total_user_view_list[i].admin.events_list[
                                                          j].event_date.time_slot.attend_slot[m][n] + " ")
