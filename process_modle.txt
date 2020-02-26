@@ -8,7 +8,9 @@ Main program design and test - 1 week(5 people)
 Ui design - 2 weeks (6 people)
 
 Design
-User will need to sign up to access admin mode and view mode, 
+ --login window
+ 	this is the mean window, user can access admin and view and login form this window
+	User will need to sign up to access admin mode and view mode
  --admin mode
 	user can create event within legal time(ex. Dec.25 won't be a available), the event will be added to view mode
  --view mode
