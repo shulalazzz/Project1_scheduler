@@ -1,0 +1,32 @@
+Waterfall model
+
+Planning 
+We want a main window with login with admin mode, login with view mode and sign up button. 
+User can create event and see other user's event and decide if they are going to attend or not
+Header class function - 5 days (2 people)
+Main program design and test - 1 week(5 people)
+Ui design - 2 weeks (6 people)
+
+Design
+User will need to sign up to access admin mode and view mode, 
+ --admin mode
+	user can create event within legal time(ex. Dec.25 won't be a available), the event will be added to view mode
+ --view mode
+	user can see all the event created by other users and can select event they want to attend
+Code
+Use python/Pyqt5 for coding and QT designer for UI 
+
+	Main window -- admin mode, view mode, and signup, and two input box for account number and password
+	View window -- events window(selectable), selected window
+	admin Widow -- a calendar, time selector and input box for event name information box for event that user created
+
+
+Compile
+Use PyCharm to compile
+
+Test
+Create user, add a event in admin mode and we will be able to see this event in view mode, there will be error message if the user trying to attend a conflict event, wrong password or do not have a account
+
+Postmortem
+
+Pushed to GitHub and granted access to professor and TA 
